@@ -52,6 +52,7 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
+	//Logic when an enemy collides with something, ie checkpoint, reaches the exit point, hit by projectile
 	void OnTriggerEnter2D(Collider2D other) {
 		if (other.tag =="Checkpoint")
 			target += 1;
@@ -70,6 +71,7 @@ public class Enemy : MonoBehaviour {
 	public void enemyHit(int hitpoints){
 		if (healthPoints - hitpoints > 0) {
 			healthPoints -= hitpoints;
+			GameManager.Instance.AudioSource.PlayOneShot(SoundManager.Instance.Hit);
 			anim.Play("Hurt");
 		} else {
 			anim.SetTrigger("didDie");
@@ -81,6 +83,7 @@ public class Enemy : MonoBehaviour {
 	public void die(){
 		isDead = true;
 		enemyCollider.enabled = false;
+		GameManager.Instance.AudioSource.PlayOneShot(SoundManager.Instance.Death);
 		GameManager.Instance.TotalKilled += 1;
 		GameManager.Instance.addMoney(rewardAmount);
 		GameManager.Instance.isWaveOver();
